@@ -15,12 +15,12 @@ describe("jasmine.Fixtures", function() {
       options.success(ajaxData);
     });
   });
-  
+
   describe("default initial config values", function() {
     it("should set 'jasmine-fixtures' as the default container id", function() {
       expect(jasmine.getFixtures().containerId).toEqual('jasmine-fixtures');
     });
-    
+
     it("should set 'spec/javascripts/fixtures' as the default fixtures path", function() {
       expect(jasmine.getFixtures().fixturesPath).toEqual('spec/javascripts/fixtures');
     });
@@ -44,7 +44,7 @@ describe("jasmine.Fixtures", function() {
     it("subsequent read from the same URL should go from cache", function() {
       jasmine.getFixtures().read(fixtureUrl, fixtureUrl);
       expect($.ajax.callCount).toEqual(1);
-    });    
+    });
   });
 
   describe("read", function() {
@@ -67,13 +67,13 @@ describe("jasmine.Fixtures", function() {
       var html = readFixtures(fixtureUrl, anotherFixtureUrl);
       expect(html).toEqual(ajaxData + ajaxData);
     });
-    
+
     it("should use the configured fixtures path concatenating it to the requested url (without concatenating a slash if it already has an ending one)", function() {
       jasmine.getFixtures().fixturesPath = 'a path ending with slash/'
       readFixtures(fixtureUrl);
       expect($.ajax.mostRecentCall.args[0].url).toEqual('a path ending with slash/'+fixtureUrl);
     });
-    
+
     it("should use the configured fixtures path concatenating it to the requested url (concatenating a slash if it doesn't have an ending one)", function() {
       jasmine.getFixtures().fixturesPath = 'a path without an ending slash'
       readFixtures(fixtureUrl);
@@ -106,7 +106,7 @@ describe("jasmine.Fixtures", function() {
       it("should automatically create fixtures container and append it to DOM", function() {
         jasmine.getFixtures().load(fixtureUrl);
         expect(fixturesContainer().size()).toEqual(1);
-      });      
+      });
     });
 
     describe("when fixture container exists", function() {
@@ -161,20 +161,20 @@ describe("jasmine.Fixtures", function() {
 
   describe("set", function() {
     var html = '<div>some HTML</div>';
-    
+
     it("should insert HTML into container", function() {
       jasmine.getFixtures().set(html);
-      expect(fixturesContainer().html()).toEqual(jasmine.JQuery.browserTagCaseIndependentHtml(html));
+      expect(fixturesContainer().html()).toEqual(jasmine.Zepto.browserTagCaseIndependentHtml(html));
     });
 
-    it("should insert jQuery element into container", function() {
+    it("should insert Zepto element into container", function() {
       jasmine.getFixtures().set($(html));
-      expect(fixturesContainer().html()).toEqual(jasmine.JQuery.browserTagCaseIndependentHtml(html));
+      expect(fixturesContainer().html()).toEqual(jasmine.Zepto.browserTagCaseIndependentHtml(html));
     });
 
     it("should have shortcut global method setFixtures", function() {
       setFixtures(html);
-      expect(fixturesContainer().html()).toEqual(jasmine.JQuery.browserTagCaseIndependentHtml(html));
+      expect(fixturesContainer().html()).toEqual(jasmine.Zepto.browserTagCaseIndependentHtml(html));
     });
 
     describe("when fixture container does not exist", function() {
@@ -191,7 +191,7 @@ describe("jasmine.Fixtures", function() {
 
       it("should replace it with new content", function() {
         jasmine.getFixtures().set(html);
-        expect(fixturesContainer().html()).toEqual(jasmine.JQuery.browserTagCaseIndependentHtml(html));
+        expect(fixturesContainer().html()).toEqual(jasmine.Zepto.browserTagCaseIndependentHtml(html));
       });
     });
   });
@@ -287,23 +287,23 @@ describe("jasmine.Fixtures using real AJAX call", function() {
 });
 
 
-describe("jQuery matchers", function() {
-  describe("when jQuery matcher hides original Jasmine matcher", function() {
-    describe("and tested item is jQuery object", function() {
-      it("should invoke jQuery version of matcher", function() {
+describe("Zepto matchers", function() {
+  describe("when Zepto matcher hides original Jasmine matcher", function() {
+    describe("and tested item is Zepto object", function() {
+      it("should invoke Zepto version of matcher", function() {
         expect($('<div />')).toBe('div');
       });
     });
 
-    describe("and tested item is not jQuery object", function() {
+    describe("and tested item is not Zepto object", function() {
       it("should invoke original version of matcher", function() {
         expect(true).toBe(true);
       });
     });
   });
 
-  describe("when jQuery matcher does not hide any original Jasmine matcher", function() {
-    describe("and tested item in not jQuery object", function() {
+  describe("when Zepto matcher does not hide any original Jasmine matcher", function() {
+    describe("and tested item in not Zepto object", function() {
       it("should pass negated", function() {
         expect({}).not.toHaveClass("some-class");
       });
@@ -329,7 +329,7 @@ describe("jQuery matchers", function() {
     it("should pass negated when class not found", function() {
       setFixtures(sandbox());
       expect($('#sandbox')).not.toHaveClass(className);
-    });    
+    });
   });
 
   describe("toHaveAttr", function() {
@@ -642,7 +642,7 @@ describe("jQuery matchers", function() {
       expect('click').not.toHaveBeenTriggeredOn($('#clickme'));
     });
   });
-  
+
   describe('toHandle', function() {
     beforeEach(function() {
       setFixtures(sandbox().html('<a id="clickme">Click Me</a> <a id="otherlink">Other Link</a>'));
@@ -653,13 +653,13 @@ describe("jQuery matchers", function() {
       $('#clickme').bind("click", handler);
       expect($('#clickme')).toHandle("click");
     });
-    
+
     it('should pass if the event is not bound', function() {
       expect($('#clickme')).not.toHandle("click");
     });
 
   });
-  
+
   describe('toHandleWith', function() {
     beforeEach(function() {
       setFixtures(sandbox().html('<a id="clickme">Click Me</a> <a id="otherlink">Other Link</a>'));
@@ -670,15 +670,15 @@ describe("jQuery matchers", function() {
       $('#clickme').bind("click", handler);
       expect($('#clickme')).toHandleWith("click", handler);
     });
-    
+
     it('should pass if the event is not bound with the given handler', function() {
       var handler = function(){ };
       $('#clickme').bind("click", handler);
-      
+
       var aDifferentHandler = function(){ };
       expect($('#clickme')).not.toHandleWith("click", aDifferentHandler);
     });
-    
+
     it('should pass if the event is not bound at all', function() {
       expect($('#clickme')).not.toHandle("click");
     });
