@@ -629,7 +629,7 @@ describe("Zepto matchers", function() {
     });
 
     it('should pass if the event was triggered on the object', function() {
-      $('#clickme').click();
+      $('#clickme').trigger('click');
       expect('click').toHaveBeenTriggeredOn($('#clickme'));
     });
 
@@ -638,7 +638,7 @@ describe("Zepto matchers", function() {
     });
 
     it('should pass negated if the event was triggered on another non-descendant object', function() {
-      $('#otherlink').click();
+      $('#otherlink').trigger('click');
       expect('click').not.toHaveBeenTriggeredOn($('#clickme'));
     });
   });
